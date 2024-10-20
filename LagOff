@@ -1,0 +1,78 @@
+-- Criando a GUI para o Modo Batata 🍟
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local ModoBatataButton = Instance.new("TextButton")
+local Title = Instance.new("TextLabel")
+
+-- Configuração da GUI
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ResetOnSpawn = false
+
+-- Configuração do MainFrame (a caixa que você pode arrastar)
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Cor preta no fundo
+MainFrame.Size = UDim2.new(0, 200, 0, 80) -- Reduzi o tamanho
+MainFrame.Position = UDim2.new(0.3, 0, 0.3, 0) -- Posição inicial
+MainFrame.Draggable = true -- Permite arrastar
+MainFrame.Active = true
+MainFrame.Selectable = true
+
+-- Título
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.Text = "Modo Batata 🍟"
+Title.BackgroundTransparency = 1
+Title.TextColor3 = Color3.fromRGB(255, 255, 255) -- Texto branco
+Title.Position = UDim2.new(0.1, 0, 0, 0)
+Title.Size = UDim2.new(0, 180, 0, 30) -- Reduzi o tamanho do título
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 18 -- Tamanho do texto menor
+
+-- Botão Modo Batata
+ModoBatataButton.Name = "ModoBatataButton"
+ModoBatataButton.Parent = MainFrame
+ModoBatataButton.Text = "Ativar Modo Batata 🍟"
+ModoBatataButton.Size = UDim2.new(0, 180, 0, 30) -- Reduzi o tamanho do botão
+ModoBatataButton.Position = UDim2.new(0.1, 0, 0.5, 0)
+ModoBatataButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Vermelho para indicar desativado
+ModoBatataButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ModoBatataButton.Font = Enum.Font.SourceSans
+ModoBatataButton.TextSize = 14 -- Tamanho do texto menor
+
+-- Função Modo Batata 🍟
+local batataAtivo = false
+
+ModoBatataButton.MouseButton1Click:Connect(function()
+    batataAtivo = not batataAtivo
+
+    if batataAtivo then
+        ModoBatataButton.Text = "Modo Batata 🍟 Ativado"
+        ModoBatataButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Verde quando ativado
+
+        -- Remove texturas e efeitos para otimizar
+        for _, v in pairs(game:GetDescendants()) do
+            if v:IsA("BasePart") then
+                v.Material = Enum.Material.SmoothPlastic -- Troca o material para SmoothPlastic
+                if v:FindFirstChild("Texture") then
+                    v.Texture:Destroy() -- Remove texturas aplicadas nas peças
+                end
+            elseif v:IsA("ParticleEmitter") or v:IsA("Beam") or v:IsA("Trail") then
+                v.Enabled = false -- Desativa partículas e efeitos visuais
+            elseif v:IsA("Decal") then
+                v:Destroy() -- Remove decals (adesivos)
+            end
+        end
+
+        -- Desativar iluminação intensa
+        game:GetService("Lighting").GlobalShadows = false
+        game:GetService("Lighting").Brightness = 1
+        game:GetService("Lighting").TimeOfDay = "14:00:00" -- Define uma hora clara
+        game:GetService("Lighting").FogEnd = 100000 -- Remove neblina
+
+    else
+        ModoBatataButton.Text = "Ativar Modo Batata 🍟"
+        ModoBatataButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Volta para vermelho
+        -- Aqui você pode restaurar as configurações padrão do jogo, se necessário
+    end
+end)
